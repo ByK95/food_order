@@ -1,0 +1,12 @@
+Flask==1.1.4
+Flask-RESTful==0.3.9
+Flask-SQLAlchemy==2.5.1
+Flask-Migrate==3.0.1
+Flask-Script==2.0.5
+psycopg2-binary==2.8.6
+ipdb==0.13.9
+flask-shell-ipython==0.4.1
+black
+marshmallow==3.13.0
+pytest==6.2.5
+flasgger==0.9.5
