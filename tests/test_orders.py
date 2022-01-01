@@ -60,4 +60,6 @@ class OrderTestCase(BaseTestCase):
         self.assertIn('order_items', response_data[0])
 
     def test_order_status_change_request(self):
-        pass 
+        response = self.client.post('/orders/1/ready', json={})
+        self.assertEqual(response.status, '200 OK')
+

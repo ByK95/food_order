@@ -4,7 +4,7 @@ from flask_restful import Api
 from flask_migrate import Migrate
 from flasgger import Swagger
 
-from app.resources.orders import OrdersViewSet
+from app.resources.orders import OrdersListViewSet, OrderDetailViewSet
 from app.shared.models import db 
 from app.models.order import Order, OrderItem
 from app.models.category import Category
@@ -20,7 +20,11 @@ migrate = Migrate(app, db)
 swagger = Swagger(app)
 
 
-api.add_resource(OrdersViewSet, '/orders/', '/orders/<int:order_id>')
+api.add_resource(OrdersListViewSet, '/orders/')
+api.add_resource(OrderDetailViewSet, 
+    '/orders/<int:order_id>/ready',
+)
+
 
 if __name__ == "__main__":
     app.run(debug=True)

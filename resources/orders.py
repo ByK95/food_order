@@ -10,14 +10,12 @@ from app.models.order import Order, OrderItem
 from app.shared.models import db
 from app.resources.schemas import OrderItemSchema, OrderSchema
 
-class OrdersViewSet(Resource):
-    paginate_by = 20
+class OrdersListViewSet(Resource):
     schema = OrderSchema()
 
     @swag_from('docs/orders.yml')
-    def get(self, page=0, *args, **kwargs):
+    def get(self, *args, **kwargs):
         orders = Order.query.options(joinedload(Order.order_items)).all()
-        # .paginate(page=page, per_page=self.paginate_by)
         return self.schema.dump(orders, many=True)
 
     @swag_from('docs/orders.yml')
@@ -30,3 +28,21 @@ class OrdersViewSet(Resource):
             return err.messages, 400
     
         return self.schema.dump(order), 200
+
+class OrderDetailViewSet(Resource):
+    schema = OrderSchema()
+    order_status_mapping = {
+        "preparing" : '200',
+        "ready": '300',
+        "delivered": "400"
+    }
+
+    @swag_from('docs/orders.yml')
+    def post(self, order_id, *args, **kwargs):
+        order_status = self.order_status_mapping.get(request.url.rsplit('/')[-1])
+        if not order_status:
+            return {"status": "Invalid"} ,400
+        order = Order.get(id=order_id)
+        order.order_status = order_status
+        order.save()
+        return {}, 200
