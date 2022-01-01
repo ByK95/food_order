@@ -7,3 +7,5 @@ docker-compose exec web flask shell
 docker-compose exec web black shell.py
 
 docker exec -it ccf081351bfb bash
+
+docker-compose exec web python -m unittest

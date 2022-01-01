@@ -6,7 +6,7 @@ from flasgger import Swagger
 
 from app.resources.orders import OrdersViewSet
 from app.shared.models import db 
-from app.models.order import Order
+from app.models.order import Order, OrderItem
 from app.models.category import Category
 from app.models.food import Food
 from app.models.restourant import Restourant
