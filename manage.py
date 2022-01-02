@@ -22,7 +22,7 @@ swagger = Swagger(app)
 
 api.add_resource(OrdersListViewSet, '/orders/')
 api.add_resource(OrderDetailViewSet, 
-    '/orders/<int:order_id>/ready',
+    '/orders/<string:task_id>/complete',
 )
 
 

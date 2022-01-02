@@ -7,6 +7,7 @@ WORKDIR /app
 ENV FLASK_APP=manage.py
 ENV FLASK_RUN_HOST=0.0.0.0
 ENV DATABASE_URL="postgresql://postgres:postgres@foodorder-db/app"
+ENV CELERY_BROKER_URL="amqp://rabbitmq:rabbitmq@rabbitmq:5672"
 
 # RUN apt add --no-cache gcc musl-dev linux-headers
 

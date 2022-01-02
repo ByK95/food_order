@@ -1,4 +1,4 @@
-from flask import request
+from flask import request, abort
 from flask_restful import Resource
 from sqlalchemy.orm import joinedload
 from flask_restful import Resource, fields, marshal
@@ -8,14 +8,25 @@ from marshmallow import ValidationError
 
 from app.models.order import Order, OrderItem
 from app.shared.models import db
-from app.resources.schemas import OrderItemSchema, OrderSchema
+from app.shared.tasks import celery
+from app.resources.schemas import OrderItemSchema, OrderSchema, OrderQuerySchema
 
 class OrdersListViewSet(Resource):
     schema = OrderSchema()
+    query_schema = OrderQuerySchema()
 
     @swag_from('docs/orders.yml')
     def get(self, *args, **kwargs):
-        orders = Order.query.options(joinedload(Order.order_items)).all()
+        errors = self.query_schema.validate(request.args)
+        if errors:
+            abort(str(errors))
+
+        orders_query = Order.query.options(joinedload(Order.order_items))
+        if request.args:
+            orders = orders_query.filter(Order.order_status == request.args["order_status"])
+        else:
+            orders = orders_query.all()
+
         return self.schema.dump(orders, many=True)
 
     @swag_from('docs/orders.yml')
@@ -26,23 +37,22 @@ class OrdersListViewSet(Resource):
             order.save()
         except ValidationError as err:
             return err.messages, 400
-    
-        return self.schema.dump(order), 200
+
+        order_data = self.schema.dump(order)
+        r = celery.send_task('tasks.process_order', kwargs={'data': order_data})
+        order_data['promise'] = r.id
+        return order_data, 200
 
 class OrderDetailViewSet(Resource):
     schema = OrderSchema()
-    order_status_mapping = {
-        "preparing" : '200',
-        "ready": '300',
-        "delivered": "400"
-    }
 
     @swag_from('docs/orders.yml')
-    def post(self, order_id, *args, **kwargs):
-        order_status = self.order_status_mapping.get(request.url.rsplit('/')[-1])
-        if not order_status:
-            return {"status": "Invalid"} ,400
-        order = Order.get(id=order_id)
-        order.order_status = order_status
+    def post(self, task_id, *args, **kwargs):
+        result = celery.AsyncResult(task_id).result
+        if not result:
+            return {"error": "Not found"}, 404
+
+        order = Order.get(id=result['id'])
+        order.order_status = result['order_status']
         order.save()
-        return {}, 200
+        return self.schema.dump(order), 200

@@ -3,6 +3,9 @@ from marshmallow import Schema, fields, post_load
 from app.models.order import Order, OrderItem
 
 
+class OrderQuerySchema(Schema):
+    order_status = fields.Str()
+
 class OrderItemSchema(Schema):
     id = fields.Integer()
     order_id = fields.Integer()

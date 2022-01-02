@@ -11,6 +11,7 @@ services:
       - ./:/app
     depends_on:
       - db
+      - rabbit
     networks:
       default:
         aliases:
@@ -33,6 +34,30 @@ services:
       default:
         aliases:
           - foodorder-db
+
+  # redis:
+  #   image: redis:latest
+  #   hostname: redis
+
+  rabbit:
+    image: rabbitmq:latest
+    environment:
+      - RABBITMQ_DEFAULT_USER=rabbitmq
+      - RABBITMQ_DEFAULT_PASS=rabbitmq
+    networks:
+      default:
+        aliases:
+          - rabbitmq
+    ports:
+      - "5673:5672"
+      - "15672:15672"
+
+  worker:
+    build: './worker'
+    user: nobody
+    depends_on:
+      - rabbit
+      - web
 
 volumes:
   db_data: {}

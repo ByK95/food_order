@@ -10,3 +10,4 @@ black
 marshmallow==3.13.0
 pytest==6.2.5
 flasgger==0.9.5
+celery==5.1.2
