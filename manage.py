@@ -20,9 +20,9 @@ migrate = Migrate(app, db)
 swagger = Swagger(app)
 
 
-api.add_resource(OrdersListViewSet, '/orders/')
+api.add_resource(OrdersListViewSet, '/api/orders/')
 api.add_resource(OrderDetailViewSet, 
-    '/orders/<string:task_id>/complete',
+    '/api/orders/<string:promise>/complete',
 )
 
 

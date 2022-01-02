@@ -9,3 +9,5 @@ docker-compose exec web black shell.py
 docker exec -it ccf081351bfb bash
 
 docker-compose exec web python -m unittest
+
+docker-compose exec web python seed.py

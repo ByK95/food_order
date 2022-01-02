@@ -1,0 +1,34 @@
+Endpoint for creating a Order
+---
+parameters:
+  - name: order
+    in: body
+    description: description
+    required: true
+    schema:
+      $ref: "#/definitions/Order" 
+requestBody:
+  content:
+    application/json:
+      schema:
+        $ref: '#/definitions/OrderItemData'
+  required: true
+definitions:
+  AsyncOrderData:
+    type: object
+    properties:
+      order_items:
+        type: array
+        items:
+          $ref: '#/definitions/OrderItemData'
+      id:
+        type: integer
+      order_status:
+        type: string
+      promise:
+        type: string 
+responses:
+  200:
+    description: Created Order Instance with promise
+    schema:
+      $ref: '#/definitions/AsyncOrderData'

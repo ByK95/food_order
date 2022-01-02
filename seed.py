@@ -11,7 +11,7 @@ from app.models.user import User
 from app.manage import app
 
 def seed():
-    a = User(name="Bayram", surname="Kaya", email="a@a.com")
+    a = User(name="user", surname="test", email="a@a.com")
     a.save()
 
     doner = Restourant(name="Süper Dönerci")

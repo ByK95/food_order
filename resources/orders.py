@@ -15,7 +15,7 @@ class OrdersListViewSet(Resource):
     schema = OrderSchema()
     query_schema = OrderQuerySchema()
 
-    @swag_from('docs/orders.yml')
+    @swag_from('docs/orders_list.yml')
     def get(self, *args, **kwargs):
         errors = self.query_schema.validate(request.args)
         if errors:
@@ -29,7 +29,7 @@ class OrdersListViewSet(Resource):
 
         return self.schema.dump(orders, many=True)
 
-    @swag_from('docs/orders.yml')
+    @swag_from('docs/order_create.yml')
     def post(self, *args, **kwargs):
         item_json = request.get_json()
         try:
@@ -46,9 +46,9 @@ class OrdersListViewSet(Resource):
 class OrderDetailViewSet(Resource):
     schema = OrderSchema()
 
-    @swag_from('docs/orders.yml')
-    def post(self, task_id, *args, **kwargs):
-        result = celery.AsyncResult(task_id).result
+    @swag_from('docs/order_complete.yml')
+    def post(self, promise, *args, **kwargs):
+        result = celery.AsyncResult(promise).result
         if not result:
             return {"error": "Not found"}, 404
 

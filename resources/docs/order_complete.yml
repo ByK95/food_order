@@ -1,0 +1,23 @@
+Endpoint for completing a Order
+---
+parameters:
+  - name: promise
+    in: path
+    type: string
+    required: true
+    desciption: task_id is 
+    schema:
+      $ref: '#/definitions/Order'
+responses:
+  200:
+    description: Created Order Instance with promise
+    schema:
+      $ref: '#/definitions/AsyncOrderData'
+  404:
+    description: Promise not found
+    content:
+      application/json:
+        schema:
+          type: object
+          example:
+       

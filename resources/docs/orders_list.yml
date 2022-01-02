@@ -1,0 +1,47 @@
+Endpoint returning a list of Orders (may be filtered by order_status)
+---
+parameters:
+  - name: order_status
+    in: query
+    type: string
+    required: false
+    description: order statuses are created = "100", completed = "200"
+definitions:
+  Order:
+    type: array
+    properties:
+      order_items:
+        type: array
+        items:
+          $ref: '#/definitions/OrderItem'
+  OrderItem:
+    type: object
+    properties:
+      food_id:
+        type: integer
+  OrderData:
+    type: object
+    properties:
+      order_items:
+        type: array
+        items:
+          $ref: '#/definitions/OrderItemData'
+      id:
+        type: integer
+      order_status:
+        type: string
+        value: "200"
+  OrderItemData:
+    type: object
+    properties:
+      food_id:
+        type: string    
+      id:
+        type: integer
+      order_id:
+        type: integer    
+responses:
+  200:
+    description: A list of Orders 
+    schema:
+      $ref: '#/definitions/OrderData'
