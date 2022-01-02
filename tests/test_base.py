@@ -31,13 +31,5 @@ class UserTestCase(BaseTestCase):
         assert participant in participants
         print("NUMBER OF ENTRIES:", len(participants))
 
-    # def test_order(self):
-    #     import ipdb;ipdb.set_trace()
-    #     self.client.post('/login', data=dict(
-    #         username=username,
-    #         password=password
-    #     ), follow_redirects=True)
-
-
 if __name__ == "__main__":
     unittest.main()

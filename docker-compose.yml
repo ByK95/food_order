@@ -35,10 +35,6 @@ services:
         aliases:
           - foodorder-db
 
-  # redis:
-  #   image: redis:latest
-  #   hostname: redis
-
   rabbit:
     image: rabbitmq:latest
     environment:
