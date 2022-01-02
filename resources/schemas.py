@@ -6,6 +6,7 @@ from app.models.order import Order, OrderItem
 class OrderQuerySchema(Schema):
     order_status = fields.Str()
 
+
 class OrderItemSchema(Schema):
     id = fields.Integer()
     order_id = fields.Integer()
@@ -14,6 +15,7 @@ class OrderItemSchema(Schema):
     @post_load
     def make_order_item(self, data, **kwargs):
         return OrderItem(**data)
+
 
 class OrderSchema(Schema):
     id = fields.Integer()

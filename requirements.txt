@@ -8,6 +8,5 @@ ipdb==0.13.9
 flask-shell-ipython==0.4.1
 black
 marshmallow==3.13.0
-pytest==6.2.5
 flasgger==0.9.5
 celery==5.1.2

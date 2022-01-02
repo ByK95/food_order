@@ -1,5 +1,6 @@
 import enum
 
+
 class OrderStatusEnum(enum.Enum):
     created = 100
     approved = 200

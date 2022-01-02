@@ -1,7 +1,7 @@
 from app.shared.models import db
 
-class ModelMixin(object):
 
+class ModelMixin(object):
     @classmethod
     def get(cls, *args, **kwargs):
         return cls.query.filter_by(*args, **kwargs).first()

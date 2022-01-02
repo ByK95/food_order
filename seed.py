@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-import sys 
-sys.path.append('/')
+import sys
+
+sys.path.append("/")
 
 from app.shared.models import db
 from app.models.order import Order, OrderItem
@@ -9,6 +10,7 @@ from app.models.food import Food
 from app.models.restourant import Restourant
 from app.models.user import User
 from app.manage import app
+
 
 def seed():
     a = User(name="user", surname="test", email="a@a.com")
@@ -49,11 +51,13 @@ def seed():
     db.session.add(order_item)
     db.session.commit()
 
+
 def truncate_all():
     models = [OrderItem, Order, Food, Restourant, Category, User]
     for model in models:
         db.session.query(model).delete()
         db.session.commit()
+
 
 if __name__ == "__main__":
     with app.app_context():
