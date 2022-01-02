@@ -1,4 +1,5 @@
 import json
+from unittest import mock
 
 from app.tests.test_base import BaseTestCase
 from app.models.order import OrderItem, Order
@@ -59,7 +60,9 @@ class OrderTestCase(BaseTestCase):
         self.assertEqual(len(response_data), 2)
         self.assertIn('order_items', response_data[0])
 
-    def test_order_status_change_request(self):
-        response = self.client.post('/orders/1/ready', json={})
+    @mock.patch('app.resources.orders.celery')
+    def test_order_status_change_request(self, mock_celery):
+        mock_celery.AsyncResult().result = {"id": 1, "order_status": 200}
+        response = self.client.post('/orders/1/complete', json={})
         self.assertEqual(response.status, '200 OK')
 
