@@ -31,13 +31,13 @@ class OrderTestCase(BaseTestCase):
 
     def test_order_create_err_messages(self):
         response = self.client.post(
-            "/orders/", json={"order_status": "300", "order_items": [{"food_id": 1}]}
+            "/api/orders/", json={"order_status": "300", "order_items": [{"food_id": 1}]}
         )
         self.assertEqual(response.status, "400 BAD REQUEST")
         self.assertEqual(response.json, {"order_status": ["Unknown field."]})
 
     def test_order_create_request(self):
-        response = self.client.post("/orders/", json={"order_items": [{"food_id": 1}]})
+        response = self.client.post("/api/orders/", json={"order_items": [{"food_id": 1}]})
 
         self.assertEqual(response.status, "200 OK")
 
@@ -48,7 +48,7 @@ class OrderTestCase(BaseTestCase):
         self.assertEqual(order.order_items[0].food_id, 1)
 
     def test_get_order_list_response(self):
-        response = self.client.get("/orders/")
+        response = self.client.get("/api/orders/")
 
         self.assertEqual(response.status, "200 OK")
 
@@ -60,5 +60,5 @@ class OrderTestCase(BaseTestCase):
     @mock.patch("app.resources.orders.celery")
     def test_order_status_change_request(self, mock_celery):
         mock_celery.AsyncResult().result = {"id": 1, "order_status": 200}
-        response = self.client.post("/orders/1/complete", json={})
+        response = self.client.post("/api/orders/1/complete", json={})
         self.assertEqual(response.status, "200 OK")
